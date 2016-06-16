@@ -37,6 +37,10 @@ if (!window.jQuery) {
     }
   });
 
+  /*
+    Sorting logic starts here
+  */
+
   // Three sort buttons should already exist in the DOM. Do the same as above.
   var sortAlpha = $('.sortAlpha');
   var sortPriceDesc = $('.sortPriceDesc');
@@ -65,24 +69,11 @@ if (!window.jQuery) {
       aValue = $(a).children().filter('div.filter').children().filter('div.sort').first().data('alpha').toLowerCase() || -1;
       bValue = $(b).children().filter('div.filter').children().filter('div.sort').first().data('alpha').toLowerCase() || -1;
 
-      // // Not all hotel envelope elements will have a hotel_alpha element
-      // if ($(a.children).filter('div').length >= 1) {
-      //   aElement = $(a.children).filter('hotel_alpha')[0];
-      //   aValue = parseInt($(aElement).attr('value').split(' ').join(''));
-      // } else {
-      //   aValue = 999999999;
-      // }
-      // if ($(b.children).filter('hotel_alpha').length >= 1) {
-      //   bElement = $(b.children).filter('hotel_alpha')[0];
-      //   bValue = parseInt($(bElement).attr('value').split(' ').join(''));
-      // } else {
-      //   bValue = 999999999;
-      // }
       if (aValue < bValue){
        return -1;
       } else if (aValue > bValue){
           return  1;
-      } else{
+      } else {
           return 0;
       }
     };
@@ -91,26 +82,21 @@ if (!window.jQuery) {
 
   var sortHotelsByPriceDesc = function (hotels) {
     var predicate = function (a, b) {
+      var sortCriteria = $("input[name='sortRateBy']:checked").val();  // will be either "high" or "low"
 
+      var aData = $(a).children().filter('div.filter').children().filter('div.sort').first().data();
+      var aPrice = aData[sortCriteria];  // aData['low'] || aData['high']
 
-      // var aElement, bElement, aValue, bValue;
-      // if ($(a.children).filter('hotel_alpha').children().length >= 1) {
-      //   aElement = $(a.children).filter('hotel_alpha').children()[0];
-      //   aPrice = parseInt($(aElement).attr('value').split(' ').join(''));
-      // } else {
-      //   aPrice = -100;
-      // }
-      //
-      // if ($(b.children).filter('hotel_alpha').children().length >= 1) {
-      //   bElement = $(b.children).filter('hotel_alpha').children()[0];
-      //   bPrice = parseInt($(bElement).attr('value').split(' ').join(''));
-      // } else {
-      //   console.log("Price not defined");
-      //   console.log(b);
-      //   bPrice = -100;
-      // }
-      // console.log("Comparing: " + bPrice + " to " + aPrice);
-      return bPrice - aPrice;
+      var bData = $(b).children().filter('div.filter').children().filter('div.sort').first().data();
+      var bPrice = bData[sortCriteria];
+
+      if (aPrice > bPrice){
+       return -1;
+     } else if (aPrice < bPrice){
+          return  1;
+      } else {
+          return 0;
+      }
     };
     return hotels.sort(predicate);
   };
@@ -139,5 +125,71 @@ if (!window.jQuery) {
     hotels = sortHotelsByPriceAsc(hotels);
     $(sortHolder).append(hotels);
     hotelsSpacingShim(hotels);
+  });
+
+  /*
+    Hotel filter/filtering code starts here
+  */
+
+  // Check the filter boxes and return selected filter criteria
+  var getFilterCriteria = function () {
+    var criteria = {
+      rate: [],
+      type: [],
+      location: [],
+      features: []
+    };
+    jQuery.each(criteria, function(criterion, holderArray) {
+      // for all all checked input[name='rate'] elements
+      var elements = $("input[name=" + criterion + "]:checked");
+      // add the value attr to the list
+      elements.each(function () {
+        if (criterion == 'rate') {
+          console.log(criterion);
+          // In the case of rates (# of stars), we need to strip all non numeric characters
+          holderArray.push([$(this).attr('value').replace(/\D/g,'')]);
+        } else {
+          holderArray.push([$(this).attr('value')]);
+        }
+      });
+    });
+    return criteria;
+  };
+
+  // Given a filter criteria object, filter the hotels on the page
+  var filterHotels = function (criteria) {
+    var hotels = hotels || $('hotel_envelope');
+    hotels.detach();
+    hotels.filter(function() {
+    /*
+      $(x).data();
+        Object { features: "", location: "beachaccess", type: "selfservice", area: "koh", stars: 3 }
+      getFilterCriteria();
+        Object { rate: Array[2], type: Array[3], location: Array[2], features: Array[6] }
+    */
+    // Find the child element of the hotel envelope with filter data
+    var dataElement = $(this).children().filter('div.filter')[0];
+    // Get its data
+    var hotelData = $(dataElement).data();
+    // In the key/value pairs, values will just be strings. Convert them
+    // to arrays to compare with criteria object
+    var hotelData = jQuery.map(hotelData, function(key, value) {
+        // If value contains multiple comma-separated strings, they will form an array
+        // Otherwise, we get [value]
+        return value.split(',');
+    });
+    jQuery.each(criteria, function(criterion, criteriaArray) {
+      // location
+      if (criteriaArray.indexOf(hotelData[criterion])) == -1 {
+        return false;
+      }
+    });
+    });
+  };
+
+  // Event handler for filters. On any checkbox click, get an object representing desired filter criteria
+  $("td.small input[type='checkbox']").click(function() {
+    var filterCriteria = getFilterCriteria();
+    filterHotels(filterCriteria);
   });
 }
