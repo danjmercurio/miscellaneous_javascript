@@ -85,31 +85,31 @@ if (!window.jQuery) {
       } else{
           return 0;
       }
-
-
     };
     return hotels.sort(predicate)
   };
 
   var sortHotelsByPriceDesc = function (hotels) {
     var predicate = function (a, b) {
-      var aElement, bElement, aValue, bValue;
-      if ($(a.children).filter('hotel_alpha').children().length >= 1) {
-        aElement = $(a.children).filter('hotel_alpha').children()[0];
-        aPrice = parseInt($(aElement).attr('value').split(' ').join(''));
-      } else {
-        aPrice = -100;
-      }
 
-      if ($(b.children).filter('hotel_alpha').children().length >= 1) {
-        bElement = $(b.children).filter('hotel_alpha').children()[0];
-        bPrice = parseInt($(bElement).attr('value').split(' ').join(''));
-      } else {
-        console.log("Price not defined");
-        console.log(b);
-        bPrice = -100;
-      }
-      console.log("Comparing: " + bPrice + " to " + aPrice);
+
+      // var aElement, bElement, aValue, bValue;
+      // if ($(a.children).filter('hotel_alpha').children().length >= 1) {
+      //   aElement = $(a.children).filter('hotel_alpha').children()[0];
+      //   aPrice = parseInt($(aElement).attr('value').split(' ').join(''));
+      // } else {
+      //   aPrice = -100;
+      // }
+      //
+      // if ($(b.children).filter('hotel_alpha').children().length >= 1) {
+      //   bElement = $(b.children).filter('hotel_alpha').children()[0];
+      //   bPrice = parseInt($(bElement).attr('value').split(' ').join(''));
+      // } else {
+      //   console.log("Price not defined");
+      //   console.log(b);
+      //   bPrice = -100;
+      // }
+      // console.log("Comparing: " + bPrice + " to " + aPrice);
       return bPrice - aPrice;
     };
     return hotels.sort(predicate);
