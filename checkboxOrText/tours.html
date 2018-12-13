@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Hotel Reservations</title>
+
+<style>
+/* Comment this out on the live site */
+div.testClass {
+	border: 1px dashed black;
+}
+div.testClass:hover {
+	opacity: 0.75;
+}
+/* Comment out on live site */
+.imgwrap {
+width:100%;
+}
+.imgwrap img {
+max-width:140px;
+height: auto;
+width: auto;
+}
+</style>         
+<style type="text/css">
+.showDetailsButton {
+	color: blue;
+	background-color: #3193c0;
+	padding:6px 6px;
+	color:#ffffff;
+	font-size:12px;
+	line-height:16px;
+	font-family:"PT Sans Narrow","Arial Narrow",Arial,Helvetica,sans-serif;
+	font-weight:600;
+	text-decoration:none;
+	box-shadow: 0 1px 1px 
+	border: 1px solid;
+	opacity: 0.90;
+	border-radius: 15px;
+    	overflow: hidden;
+	}
+	
+.hideDetailsButton {
+color: red;
+}
+
+.sortAlpha, .sortPriceDesc, .sortPriceAsc {
+	color: blue;
+	background-color: #3193c0;
+	padding:6px 6px;
+	color:#ffffff;
+	font-size:12px;
+	line-height:16px;
+	font-family:"PT Sans Narrow","Arial Narrow",Arial,Helvetica,sans-serif;
+	font-weight:600;
+	text-decoration:none;
+	box-shadow: 0 1px 1px 
+	border: 1px solid;
+	opacity: 0.90;
+	border-radius: 15px;
+    	overflow: hidden;
+	}
+
+button#gobutton  {
+	color: blue;
+	background-color: #3193c0;
+	padding:6px 6px;
+	color:#ffffff;
+	font-size:12px;
+	line-height:16px;
+	font-family:"PT Sans Narrow","Arial Narrow",Arial,Helvetica,sans-serif;
+	font-weight:600;
+	text-decoration:none;
+	box-shadow: 0 1px 1px 
+	border: 1px solid;
+	opacity: 0.90;
+	border-radius: 15px;
+    	overflow: hidden;
+	}
+	
+
+bd {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px; background-color:white;
+}
+
+tbl {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;border:0px;
+	background-color:white;
+	padding:4px 4px 4px 4px;
+}
+
+indata {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;border:0px;
+	background-color:white;
+	padding:4px 4px 4px 4px;
+	border-width:4px;border-style:inset;
+}
+td	{
+	padding:0px;spacing:0px
+}
+
+td.small {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:9px;
+}
+
+td.medium {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:11px;font-weight:600;
+}
+
+
+tr	{
+	padding:0px;spacing:0px
+}
+
+
+
+td.big {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;font-weight:900;
+}
+
+input {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 10px;
+}
+select {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+</style>
+<link rel="stylesheet" type="text/css" href="/fasnet/si/css/basic.css" />
+<link rel="stylesheet" type="text/css" href="/fasnet/si/css/jquery.datepick.css" />
+<link rel="stylesheet" type="text/css" href="/fasnet/si/css/jquery-ui.css" />
+<script language="javascript" type="text/javascript">
+var urlbasepath = "/fasnet/si"; //Do not remove this. Bad things will happen.  You have been warned.
+</script>
+
+<!--<<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/jquery.js"></script> -->
+<script
+  src="http://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/jquery.plugin.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/jquery.datepick.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/json2.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/agent-sel.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/spin.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/jquery-ui.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/mapfiles/hotels.js"></script>
+<script language="javascript" type="text/javascript" src="/fasnet/si/scripts/lightbox.js"></script>
+
+<style type="text/css">
+#arrival_,#departure_,#arrival2_,#departure2_,#pickupdt_,#returndt_,#setdate_{color:transparent;background: url("/fasnet/si/.graph/calendar-icon.png") no-repeat scroll 0px 0px transparent;background-size:20px 15px;width:23px;cursor:pointer;border:0;}
+
+</style>
+
+</head>
+<BODY BGCOLOR="WHITE">
+<FORM ACTION="http://www.xupstart.com/cgi-bin/data-plus" METHOD="POST" name="form2">
+<RETVAR>
+<INPUT NAME="sessno" TYPE="hidden" VALUE=" 2 ">
+<INPUT NAME="fid" TYPE="hidden" VALUE="si">
+<INPUT NAME="segment" TYPE="hidden" VALUE="SELECT">
+<INPUT NAME="leg" TYPE="hidden" VALUE=" 1 ">
+<INPUT NAME="segstack" TYPE="hidden" VALUE="">
+<INPUT NAME="area" TYPE="hidden" VALUE="__area__">
+<INPUT NAME="prod" TYPE="hidden" VALUE="__prod__">
+<INPUT NAME="city" TYPE="hidden" VALUE="hnl">
+<INPUT NAME="airport" TYPE="hidden" VALUE="__airport__">
+<INPUT NAME="homeairport" TYPE="hidden" VALUE="hnl">
+<INPUT NAME="orgdate" TYPE="hidden" VALUE="080918">
+<INPUT NAME="homedate" TYPE="hidden" VALUE="08/10/18">
+<INPUT NAME="corg" TYPE="hidden" VALUE="hnl">
+<INPUT NAME="cdep" TYPE="hidden" VALUE="080918">
+<INPUT NAME="cdest" TYPE="hidden" VALUE="hnl">
+<INPUT NAME="retdate" TYPE="hidden" VALUE="08/10/18">
+<INPUT NAME="misc" TYPE="hidden" VALUE="/fasnet/si/msg">
+<INPUT NAME="adate" TYPE="hidden" VALUE="08/09/18">
+<INPUT NAME="odate" TYPE="hidden" VALUE="08/10/18">
+</RETVAR>
+
+
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" BGCOLOR="WHITE">
+<TR>
+<TD VALIGN="TOP"><IMG SRC="/fasnet/si/.graph/hdr.gif" BORDER="0"></TD>
+<TD VALIGN="TOP"><img src="/fasnet/si/.graph/room.gif"></TD>
+<td><button id="gobutton" type="submit" name="next" value="next">Next</button></td>
+<td><button id="gobutton" type="submit" name="SEE" value="SEE" >View Itinerary</button>
+</td>
+</TR>
+</table>
+<table border="0" width="100%">
+<tr>
+<td valign="top" width="10%">
+<table>
+<tr><td class="big" valign="top" >Filter by:</td></tr>
+<tr><td class="small"><input type="checkbox" name="rate" value="star5"> 5 star</td></tr>
+<tr><td class="small"><input type="checkbox" name="rate" value="star4"> 4 star</td></tr>
+<tr><td class="small"><input type="checkbox" name="rate" value="star3"> 3 star</td></tr>
+<tr><td class="small"><input type="checkbox" name="rate" value="star2"> 2 star</td></tr>
+<tr><td class="small"><input type="checkbox" name="rate" value="star1"> 1 star</td></tr>
+<tr><td><p> </p></td></tr>
+<tr><td><hr width="100%"></td></tr>
+<tr><td class="small"><input type="checkbox" name="type" value="luxury">Luxury</td></tr>
+<tr><td class="small"><input type="checkbox" name="type" value="moderate">Moderate</td></tr>
+<tr><td class="small"><input type="checkbox" name="type" value="budget">Budget</td></tr>
+<tr><td class="small"><input type="checkbox" name="type" value="selfservice">Self Service</td></tr>
+<tr><td class="small"><input type="checkbox" name="type" value="unique">Unique</td></tr>
+<tr><td><p> </p></td></tr>
+<tr><td><hr width="100%"></td></tr>
+<tr><td class="small"><input type="checkbox" name="location" value="beachfront">Beach Front</td></tr>
+<tr><td class="small"><input type="checkbox" name="location" value="cityarea">City Area</td></tr>
+<tr><td class="small"><input type="checkbox" name="location" value="beachaccess">Beach Access</td></tr>
+<tr><td class="small"><input type="checkbox" name="location" value="cityaccess">City Access</td></tr>
+<tr><td><p> </p></td></tr>
+<tr><td><hr width="100%"></td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="restaurant">Restaurant</td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="spa">Spa</td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="oceanactivities">Ocean Activities</td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="golf">Golf</td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="spa18">Spa     18</td></tr>
+<tr><td class="small"><input type="checkbox" name="features" value="tennis">Tennis</td></tr>
+<tr>
+<td class="small" width="70%">
+<button type="button" id="filterButton">Filter Choices</button></td>
+<td class="small" width="30%">
+<button type="button" id="filterResetButton">Reset choices</button></td>
+</tr>
+</table>
+</td>
+<td valign="top">
+<!--land-item.html-->
+<!--room-none.html-->
+<INPUT TYPE="HIDDEN" NAME="NOROOM" VALUE="NOROOM">
+<EOROOM/>
+<!--carz.html-->
+<a name="carz"> </a>
+<!--tour-start.html-->
+<a name="tourz"
+<tours>
+<!--tour-vend.html-->
+
+<table width="100%" border="0">
+<tr><td valign="top" width="25%">
+<img src="/fasnet/si/brochure/gen/no_pic.gif" >
+</td>
+<td>
+	<div class="testClass checkboxOrText">
+	<table border="0" width="90%">
+	<TR><TD width="100%">
+	The tours and activities listed below are strictly <i>optional</i> and 
+	you may select as many as desired.
+	&nbsp;&nbsp;
+	When you receive your actual travel documents in the mail, you will 
+	have the addresses and phone numbers of each operator and you are 
+	encouraged to call in advance to set up actual dates and times.
+
+	</TD></TR>
+	</table>
+	<table BORDER="1" bgcolor="#00f8a1" CELLSPACING=0 CELLPADDING=2 WIDTH="90%" >
+	<tr ALIGN="LEFT" VALIGN="TOP">
+	<td  ALIGN="LEFT" WIDTH="4%">
+	<b><font size="2">
+	Select as
+	</font></b></td>
+
+	<td  ALIGN="LEFT" VALIGN="TOP" WIDTH="30%">
+	<b><font size="2">
+	many items as desired
+	</font></b></td>
+
+	<td  ALIGN="LEFT" VALIGN="TOP" WIDTH="30%">
+	</td>
+
+	<td  ALIGN="right" VALIGN="TOP" WIDTH="20%">.</td>
+	</tr>
+	<td  ALIGN="right" VALIGN="TOP" WIDTH="13%">
+	<b><font size="-0">
+	</font></font></b></td>
+	</tr>
+
+	<!--tour-pkg.html-->
+	<tour_pkg>
+	<!--tour-info.html-->
+	<TR>
+	<TD></TD>
+
+	<td align="left" VALIGN="bottom" >
+	<font size="2"> ENG/GER&nbsp;PRESOLD </font></font>
+	</td>
+
+	<td ALIGN="left" VALIGN="bottom">
+	<font size="-2"> 
+
+	</font>
+	</td>
+
+	<td ></td>
+	</tr>
+	<!--tour-info.html-->
+	<TR>
+	<TD></TD>
+
+	<td align="left" VALIGN="bottom" >
+	<font size="2"> Dolphin&nbsp;Encounter </font></font>
+	</td>
+
+	<td ALIGN="left" VALIGN="bottom">
+	<font size="-2"> 
+	SLPDE
+	</font>
+	</td>
+
+	<td ></td>
+	</tr>
+	<!--tour-kids.html-->
+	<!--tour-item.html-->
+	<TR VALIGN="bottom">
+	<TD></TD>
+	<td align="left" VALIGN="TOP"><font size="2">
+	SEA LIFE PARK
+	</font></td>
+	</tr>
+	<tr>
+	<TD  ALIGN="left" width="7%">
+	All in party
+	<INPUT TYPE="checkbox" NAME="tour1" VALUE="000007920002000000000003000002">
+	</TD>
+
+	<td  ALIGN="left" colspan="2"><font size="2">
+	2  Passengers
+	</font></font></td>
+
+	<td  align="right" VALIGN="TOP" width="20%">
+	<font size="2">
+	&nbsp;&nbsp;&nbsp;&nbsp;264.00
+	</font>
+	</td>
+	<td></td>
+	</tr>
+	<!--tour-cartea.html-->
+	<!-- adults -->
+
+	<tr>
+	<td width="4%">
+	<INPUT TYPE="text" NAME="tour1ax@0000039600000003000002" size="3">
+	Adults
+	</TD>
+
+	<td align="left" VALIGN="TOP">
+	<font size="2">
+	Enter the number of Adults
+	</font>
+	</td>
+
+	<td  ALIGN="left" VALIGN="TOP"><font size="2">
+	at-each
+	</font></font></td>
+
+	<td  align="right" VALIGN="TOP"><font size="2">
+	&nbsp;&nbsp;&nbsp;&nbsp;132.00
+	</font></font></td>
+	</tr>
+	<!--tour-cartec.html-->
+	<!-- children -->
+
+	<tr>
+	<td width="7%">
+	<INPUT TYPE="text" NAME="tour1cx@0000039600000003000002" size="3">
+	Children
+	</TD>
+
+	<td align="left" VALIGN="TOP"><font size="2">
+	Enter the number of children
+	</font></td>
+
+	<td  ALIGN="left" VALIGN="TOP"><font size="2">
+	at-each
+	</font></font></td>
+
+	<td  align="right" VALIGN="TOP"><font size="2">
+	&nbsp;&nbsp;&nbsp;&nbsp;132.00
+	</font></font></td>
+	</tr>
+	<!--tour-ecarte.html-->
+	<tr><td>&nbsp;</td></tr>
+	<td><td><hr width="100%"></td></tr>
+	<!--tour-epkg.html-->
+	</tour_pkg>
+	<!--tour-tlr.html-->
+	</TABLE>
+	</TABLE>
+	</TABLE>
+	<!--tour-end.html-->
+	</tours>
+	<!--land-tlr.html-->
+	<A NAME="done"><BR></A>
+
+	</td>
+	</tr>
+	</table>
+</div>
+</form>
+
+<hr width="100%">
+<table width="100%">
+<tr>
+<td class="big" align="center">
+123 address / Honolulu HI 96830 / PH 808.926.3888 / FAX 808.922.6951
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+// To apply this to a div give it the class checkboxOrText e.g. <div class="someClass anotherClass checkboxOrText">,,,</div>
+if (typeof(initCheckbox) === "undefined") {
+  var initCheckbox = function() {
+    console.log('Initializing page-specific behavior for input tags...');
+	var selector = $('div.checkboxOrText input');
+	selector.focus(function() {
+		if (this.type === "text") {
+			selector.filter("input[type='checkbox']").each(function () {
+				$(this).prop('checked', false);
+			});
+		}
+		if (this.type === "checkbox") {
+			selector.filter("input[type='text']").each(function () {
+				$(this).val('');
+			});
+		}
+    });
+  }
+  initCheckbox();
+} else {
+  console.log("Encountered definition for checkbox logic function which has already been parsed. Skipping...");
+}
+</script>	
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script type="text/javascript" src="/fasnet/si/scripts/sort.js"></script>
+
+</body>
+</html>
